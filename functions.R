@@ -29,8 +29,10 @@ psrc_line_chart <- function(df, x, y, fill, lwidth=1, colors, xlabel=NULL, ylabe
 
 psrc_trend_table <- function(df, title, num_cols, per_cols) {
 
+      tbl_title <- paste0("**",title,"**")
+
       tbl <- gt(df) |>
-            tab_header(title = md(title)) |>
+            tab_header(title = md(tbl_title)) |>
             fmt_number(columns=num_cols, decimals = 0) |>
             fmt_percent(columns=per_cols, decimals = 0) |>
             opt_row_striping() |>
