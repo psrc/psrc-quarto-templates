@@ -21,5 +21,28 @@ psrc_line_chart <- function(df, x, y, fill, lwidth=1, colors, xlabel=NULL, ylabe
           panel.grid.major.x = element_line(linewidth = 0.1, color="#dcdcdc"),
           plot.caption =  element_text(family="Poppins", face="plain", size = 10, color="black", hjust=0),
           plot.caption.position = "plot")
+      
+      
+  return(c)
 
+}
+
+psrc_trend_table <- function(df, title, num_cols, per_cols) {
+
+      tbl <- gt(df) |>
+            tab_header(title = md(title)) |>
+            fmt_number(columns=num_cols, decimals = 0) |>
+            fmt_percent(columns=per_cols, decimals = 0) |>
+            opt_row_striping() |>
+            cols_align(align = "center", columns = c(num_cols, per_cols)) |>
+            tab_options(column_labels.background.color = "#F05A28") |>
+            tab_style(style = cell_borders(sides = c("left","right"), color = "white", weight = px(2), style = "solid"), locations = cells_body()) |>
+            tab_style(style = cell_borders(sides = c("left","right"), color = "white", weight = px(2), style = "solid"), locations = cells_column_labels()) |>
+            tab_style(style = cell_borders(sides = c("top","left","right"), color = "white", weight = px(2), style = "solid"), locations = cells_title()) |>
+            opt_align_table_header(align = "left") |>
+            tab_options(table.width = pct(100),
+                        table.font.names = "Poppins",
+                        heading.title.font.size = px(16))
+      
+      return(tbl)
 }

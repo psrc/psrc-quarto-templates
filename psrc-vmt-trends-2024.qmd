@@ -17,12 +17,13 @@ library(dplyr)
 library(readr)
 library(ggplot2)
 library(tidyr)
+library(gt)
 
 source("functions.R")
 
 ```
 
-# Region Vehicle Miles Traveled
+# Regional Vehicle Miles Traveled Trends
 
 ```{r region-vmt-calcs, echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -53,7 +54,7 @@ max_obs_vmt_ratio <- max_obs_vmt_val / max_for_vmt_val
 
 ```
 
-Th figure below compares recent vehicle miles traveled (VMT) trends with forecast outputs from the Regional Transportation Plan (RTP). The RTP is the region's roadmap to meeting various transportation goals, including Climate Goals to reduce greenhouse gas emissions (GHG) 80% by the year 2050. VMT is an important metric that combined with the fuel type of the vehicles traveling has a direct impact on GHG emissions. In `r max_obs_vmt_yr`, regional VMT was at `r round(max_obs_vmt_val / 1000000, 1)` million miles per day, `r round(max_obs_vmt_ratio*100, 0)`% of the forecasted VMT from the RTP in `r max_obs_vmt_yr`.
+The figure below compares recent vehicle miles traveled (VMT) trends with forecast outputs from the Regional Transportation Plan (RTP). The RTP is the region's roadmap to meeting various transportation goals, including Climate Goals to reduce greenhouse gas emissions (GHG) 80% by the year 2050. VMT is an important metric that combined with the fuel type of the vehicles traveling has a direct impact on GHG emissions. In `r max_obs_vmt_yr`, regional VMT was at `r round(max_obs_vmt_val / 1000000, 1)` million miles per day, `r round(max_obs_vmt_ratio*100, 0)`% of the forecasted VMT from the RTP in `r max_obs_vmt_yr`.
 
 ```{r region-vmt-plot, echo=FALSE, warning=FALSE, message=FALSE, fig.width = 8}
 
@@ -61,3 +62,40 @@ region_vmt_chart <- psrc_line_chart(df=vmt, x="year", y="estimate", fill="variab
 region_vmt_chart
 
 ```
+
+# County Trends
+```{r county-vmt-calcs, echo=FALSE, warning=FALSE, message=FALSE}
+
+vmt_table_yrs <- c(2015, 2019, max_obs_vmt_yr)
+
+county_vmt <- read_csv("x:/DSA/trends-data/vmt/hpms-rtp-2022.csv", show_col_types = FALSE) |> 
+  filter(data_year %in% vmt_table_yrs & grouping == "Total" & variable == "Observed" & geography != "Region") |>
+  select(Year = "data_year", County = "geography", estimate) |>
+  mutate(estimate = round(estimate, -3)) |>
+  mutate(County = paste0(County, " County")) |>
+  pivot_wider(names_from = Year, values_from = estimate) |>
+  mutate(`Total Share of Region VMT` = .data[[as.character(max_obs_vmt_yr)]] / max_obs_vmt_val) |>
+  mutate(`Share of Pre-Pandemic VMT` = .data[[as.character(max_obs_vmt_yr)]] / `2019`)
+
+king_vmt_max_yr <- county_vmt |> filter(County == "King County") |> select("Total Share of Region VMT") |> pull()
+kitsap_vmt_max_yr <- county_vmt |> filter(County == "Kitsap County") |> select("Total Share of Region VMT") |> pull()
+pierce_vmt_max_yr <- county_vmt |> filter(County == "Pierce County") |> select("Total Share of Region VMT") |> pull()
+snohomish_vmt_max_yr <- county_vmt |> filter(County == "Snohomish County") |> select("Total Share of Region VMT") |> pull()
+
+king_vmt_shr_pan <- county_vmt |> filter(County == "King County") |> select("Share of Pre-Pandemic VMT") |> pull()
+kitsap_vmt_shr_pan <- county_vmt |> filter(County == "Kitsap County") |> select("Share of Pre-Pandemic VMT") |> pull()
+pierce_vmt_shr_pan <- county_vmt |> filter(County == "Pierce County") |> select("Share of Pre-Pandemic VMT") |> pull()
+snohomish_vmt_shr_pan <- county_vmt |> filter(County == "Snohomish County") |> select("Share of Pre-Pandemic VMT") |> pull()
+
+```
+
+King County, as the largest county in the region, consistently has the highest total VMT of all counties in the region. In `r max_obs_vmt_yr`, King County accounted for `r round(king_vmt_max_yr*100, 0)`% of the region's total VMT. In general, the share of daily vehicle miles traveled by county is fairly consistent with the share of the total population of the region in each county. Every county was still below pre-pandemic VMT levels in `r max_obs_vmt_yr` with VMT varying from `r round(king_vmt_shr_pan*100, 0)`% of 2019 VMT levels in King County to `r round(kitsap_vmt_shr_pan*100, 0)`% of 2019 VMT levels in Kitsap County. 
+
+```{r county-vmt-table, echo=FALSE, warning=FALSE, message=FALSE}
+
+county_vmt_tbl <- psrc_trend_table(df = county_vmt, title = "Daily Vehicle Miles Traveled by County in the PSRC Region", num_cols = as.character(vmt_table_yrs), per_cols = c("Total Share of Region VMT", "Share of Pre-Pandemic VMT"))
+
+county_vmt_tbl
+
+```
+
