@@ -53,14 +53,11 @@ max_obs_vmt_ratio <- max_obs_vmt_val / max_for_vmt_val
 
 ```
 
-@fig-region-vmt compares recent vehicle miles traveled (VMT) trends with forecast outputs from the Regional Transportation Plan (RTP). The RTP is the region's roadmap to meeting various transportation goals, including Climate Goals to reduce greenhouse gas emissions (GHG) 80% by the year 2050. VMT is an important metric that combined with the fuel type of the vehicles traveling has a direct impact on GHG emissions. In `r max_obs_vmt_yr`, regional VMT was at `r round(max_obs_vmt_val / 1000000, 1)` million miles per day, `r round(max_obs_vmt_ratio*100, 0)`% of the forecasted VMT from the RTP in `r max_obs_vmt_yr`.
+Th figure below compares recent vehicle miles traveled (VMT) trends with forecast outputs from the Regional Transportation Plan (RTP). The RTP is the region's roadmap to meeting various transportation goals, including Climate Goals to reduce greenhouse gas emissions (GHG) 80% by the year 2050. VMT is an important metric that combined with the fuel type of the vehicles traveling has a direct impact on GHG emissions. In `r max_obs_vmt_yr`, regional VMT was at `r round(max_obs_vmt_val / 1000000, 1)` million miles per day, `r round(max_obs_vmt_ratio*100, 0)`% of the forecasted VMT from the RTP in `r max_obs_vmt_yr`.
 
-```{r region-vmt-plot, echo=FALSE, warning=FALSE, message=FALSE}
-#| label: fig-region-vmt
-#| fig.width: 8
-#| fig.cap: "Daily Vehicle Miles Traveled in the PSRC Region."
+```{r region-vmt-plot, echo=FALSE, warning=FALSE, message=FALSE, fig.width = 8}
 
-region_vmt_chart <- psrc_line_chart(vmt, x="year", y="estimate", fill="variable", colors = c("#E3C9E3", "#91268F"), breaks = 10)
+region_vmt_chart <- psrc_line_chart(df=vmt, x="year", y="estimate", fill="variable", colors = c("#E3C9E3", "#91268F"), breaks = 10, title="Daily Vehicle Miles Traveled in the PSRC Region", source="Source: WSDOT HPMS data and PSRC SoundCast Model")
 region_vmt_chart
 
 ```
