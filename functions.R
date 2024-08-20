@@ -16,7 +16,7 @@ psrc_line_chart <- function(df, x, y, fill, lwidth=1, colors, xlabel=NULL, ylabe
     labs(x=xlabel, y=ylabel, title=title, caption=source) +
     psrcplot::psrc_style() +
     scale_x_continuous(n.breaks=breaks) +
-    theme(plot.title = element_text(family = "Poppins", color = "black", size = 14),
+    theme(plot.title = element_text(family = "Poppins", face = "bold", size = 14),
           panel.grid.major.y = element_line(linewidth = 0.1, color="#dcdcdc"),
           panel.grid.major.x = element_line(linewidth = 0.1, color="#dcdcdc"),
           plot.caption =  element_text(family="Poppins", face="plain", size = 10, color="black", hjust=0),
