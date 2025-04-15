@@ -24,10 +24,14 @@ source("functions.R")
 ```
 
 # Regional Vehicle Miles Traveled Trends
+```{r data}
+data <-  read_csv("x:/DSA/trends-data/vmt/hpms-rtp-2022.csv", show_col_types = FALSE)
+```
+
 
 ```{r region-vmt-calcs, echo=FALSE, warning=FALSE, message=FALSE}
 
-vmt <- read_csv("x:/DSA/trends-data/vmt/hpms-rtp-2022.csv", show_col_types = FALSE) |> 
+vmt <- data |> 
   filter(geography == "Region" & grouping == "Total") |>
   select(year = "data_year", variable, estimate) |>
   drop_na()
@@ -68,7 +72,7 @@ region_vmt_chart
 
 vmt_table_yrs <- c(2015, 2019, max_obs_vmt_yr)
 
-county_vmt <- read_csv("x:/DSA/trends-data/vmt/hpms-rtp-2022.csv", show_col_types = FALSE) |> 
+county_vmt <- data
   filter(data_year %in% vmt_table_yrs & grouping == "Total" & variable == "Observed" & geography != "Region") |>
   select(Year = "data_year", County = "geography", estimate) |>
   mutate(estimate = round(estimate, -3)) |>
