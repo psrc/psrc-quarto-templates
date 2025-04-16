@@ -8,7 +8,6 @@ format:
 
 params:
   trend_date: "August 2024"
-
 ---
 
 ```{r setup, , echo=FALSE, warning=FALSE, message=FALSE}
@@ -24,10 +23,10 @@ source("functions.R")
 ```
 
 # Regional Vehicle Miles Traveled Trends
+
 ```{r data}
 data <-  read_csv("x:/DSA/trends-data/vmt/hpms-rtp-2022.csv", show_col_types = FALSE)
 ```
-
 
 ```{r region-vmt-calcs, echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -68,6 +67,7 @@ region_vmt_chart
 ```
 
 # County Trends
+
 ```{r county-vmt-calcs, echo=FALSE, warning=FALSE, message=FALSE}
 
 vmt_table_yrs <- c(2015, 2019, max_obs_vmt_yr)
@@ -93,7 +93,7 @@ snohomish_vmt_shr_pan <- county_vmt |> filter(County == "Snohomish County") |> s
 
 ```
 
-King County, as the largest county in the region, consistently has the highest total VMT of all counties in the region. In `r max_obs_vmt_yr`, King County accounted for `r round(king_vmt_max_yr*100, 0)`% of the region's total VMT. In general, the share of daily vehicle miles traveled by county is fairly consistent with the share of the total population of the region in each county. Every county was still below pre-pandemic VMT levels in `r max_obs_vmt_yr` with VMT varying from `r round(king_vmt_shr_pan*100, 0)`% of 2019 VMT levels in King County to `r round(kitsap_vmt_shr_pan*100, 0)`% of 2019 VMT levels in Kitsap County. 
+King County, as the largest county in the region, consistently has the highest total VMT of all counties in the region. In `r max_obs_vmt_yr`, King County accounted for `r round(king_vmt_max_yr*100, 0)`% of the region's total VMT. In general, the share of daily vehicle miles traveled by county is fairly consistent with the share of the total population of the region in each county. Every county was still below pre-pandemic VMT levels in `r max_obs_vmt_yr` with VMT varying from `r round(king_vmt_shr_pan*100, 0)`% of 2019 VMT levels in King County to `r round(kitsap_vmt_shr_pan*100, 0)`% of 2019 VMT levels in Kitsap County.
 
 ```{r county-vmt-table, echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -102,4 +102,3 @@ county_vmt_tbl <- psrc_trend_table(df = county_vmt, title = "Daily Vehicle Miles
 county_vmt_tbl
 
 ```
-
